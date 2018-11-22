@@ -1,7 +1,7 @@
 import random
 
 
-def is_prime(n):
+def is_prime(n: int) -> bool:
     """
     Tests to see if a number is prime.
     >>> is_prime(2)
@@ -20,7 +20,7 @@ def is_prime(n):
             else:
                 return True
 
-def gcd(a, b):
+def gcd(a: int, b: int) -> int:
     """
     Euclid's algorithm for determining the greatest common divisor.
     >>> gcd(12, 15)
@@ -35,7 +35,7 @@ def gcd(a, b):
             b = b % a
     return a+b
 
-def find_xy(n, chart):
+def find_xy(n: int, chart: list) -> list:
     if n == len(chart)-1:
         x = 0
         y = 1
@@ -48,7 +48,7 @@ def find_xy(n, chart):
         a = [x, y]
         return a
 
-def multiplicative_inverse(e, phi):
+def multiplicative_inverse(e: int, phi: int) -> int:
     """
     Euclid's extended algorithm for finding the multiplicative
     inverse of two numbers.
@@ -77,7 +77,7 @@ def multiplicative_inverse(e, phi):
     return y % chart[0][0]
 
 
-def generate_keypair(p, q):
+def generate_keypair(p: int, q: int) -> tuple:
     if not (is_prime(p) and is_prime(q)):
         raise ValueError('Both numbers must be prime.')
     elif p == q:
@@ -101,10 +101,10 @@ def generate_keypair(p, q):
 
     # Return public and private keypair
     # Public key is (e, n) and private key is (d, n)
-    return ((e, n), (d, n))
+    return (e, n), (d, n)
 
 
-def encrypt(pk, plaintext):
+def encrypt(pk: tuple, plaintext: str) -> str:
     # Unpack the key into it's components
     key, n = pk
     # Convert each letter in the plaintext to numbers based on
@@ -114,7 +114,7 @@ def encrypt(pk, plaintext):
     return cipher
 
 
-def decrypt(pk, ciphertext):
+def decrypt(pk: tuple, ciphertext: str) -> str:
     # Unpack the key into its components
     key, n = pk
     # Generate the plaintext based on the ciphertext and key using a^b mod m
