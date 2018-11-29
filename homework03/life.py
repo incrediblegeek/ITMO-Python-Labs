@@ -1,7 +1,8 @@
 import pygame
 from pygame.locals import *
 import random
-
+import copy
+from typing import List, Tuple
 
 class GameOfLife:
 
@@ -43,18 +44,18 @@ class GameOfLife:
                     running = False
             self.draw_grid()
             self.draw_cell_list(self.clist)
-            # Выполнение одного шага игры (обновление состояния ячеек)
-            # PUT YOUR CODE HERE
-
+            self.update_cell_list(self.clist)
             pygame.display.flip()
             clock.tick(self.speed)
         pygame.quit()
 
-    def cell_list(self, randomize=True):
+    def cell_list(self, randomize=True) -> List:
         """ Создание списка клеток. """
         self.clist = []
-        for i in range(self.cell_height):
-            self.clist.append([random.randint(0, 1) for j in range(self.cell_width)])
+        if randomize:
+            for i in range(self.cell_height):
+                self.clist.append([random.randint(0, 1) for j in range(self.cell_width)])
+        else: self.clist = [[0] * self.cell_width for i in range(self.cell_height)]
         return self.clist
 
     def draw_cell_list(self, clist):
@@ -70,27 +71,30 @@ class GameOfLife:
                 else:
                     pygame.draw.rect(self.screen, pygame.Color('Red'), (x, y, a, b))
 
-    def get_neighbours(self, cell):
-        """ Вернуть список соседей для указанной ячейки
-
-        :param cell: Позиция ячейки в сетке, задается кортежем вида (row, col)
-        :return: Одномерный список ячеек, смежных к ячейке cell
-        """
+    def get_neighbours(self, cell: Tuple) -> List:
+        """ Вернуть список соседей для указанной ячейки """
         neighbours = []
-        # PUT YOUR CODE HERE
+        x = cell[0]
+        y = cell[1]
+        for i in range(x - 1, x + 2):
+            for j in range(y - 1, y + 2):
+                if (0 <= i < self.cell_height) and (0 <= j < self.cell_width) and (i != x or j != y):
+                    neighbours.append(self.clist[i][j])
         return neighbours
 
-    def update_cell_list(self, cell_list):
-        """ Выполнить один шаг игры.
-
-        Обновление всех ячеек происходит одновременно. Функция возвращает
-        новое игровое поле.
-
-        :param cell_list: Игровое поле, представленное в виде матрицы
-        :return: Обновленное игровое поле
-        """
+    def update_cell_list(self, cell_list: List) -> List:
+        """ Выполнить один шаг игры. """
         new_clist = []
-        # PUT YOUR CODE HERE
+        new_clist = copy.deepcopy(cell_list)
+        for i in range(0, self.cell_height):
+            for j in range(0, self.cell_width):
+                if self.get_neighbours((i, j)).count(1) == 2:
+                    continue
+                elif self.get_neighbours((i, j)).count(1) == 3:
+                    new_clist[i][j] = 1
+                else:
+                    new_clist[i][j] = 0
+        self.clist = new_clist
         return self.clist
 
 if __name__ == '__main__':
