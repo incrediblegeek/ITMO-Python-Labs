@@ -57,14 +57,10 @@ class GameOfLife:
         pygame.quit()
 
     def cell_list(self, randomize=True):
-        """ Создание списка клеток.
-
-        :param randomize: Если True, то создается список клеток, где
-        каждая клетка равновероятно может быть живой (1) или мертвой (0).
-        :return: Список клеток, представленный в виде матрицы
-        """
+        """ Создание списка клеток. """
         self.clist = []
-        # PUT YOUR CODE HERE
+        for i in range(self.cell_height):
+            self.clist.append([random.randint(0, 1) for j in range(self.cell_width)])
         return self.clist
 
     def draw_cell_list(self, clist):
