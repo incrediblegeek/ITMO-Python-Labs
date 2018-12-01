@@ -1,12 +1,12 @@
 import pygame
 from pygame.locals import *
 import random
-import copy
+from copy import deepcopy
 from typing import List, Tuple
 
 class GameOfLife:
 
-    def __init__(self, width=640, height=480, cell_size=10, speed=10):
+    def __init__(self, width: int = 640, height: int = 480, cell_size: int = 10, speed: int = 10) -> None:
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -23,14 +23,14 @@ class GameOfLife:
         # Скорость протекания игры
         self.speed = speed
 
-    def draw_grid(self):
+    def draw_grid(self) -> None:
         """ Отрисовать сетку """
         for x in range(0, self.width, self.cell_size):
             pygame.draw.line(self.screen, pygame.Color('black'), (x, 0), (x, self.height))
         for y in range(0, self.height, self.cell_size):
             pygame.draw.line(self.screen, pygame.Color('black'), (0, y), (self.width, y))
 
-    def run(self):
+    def run(self) -> None:
         """ Запустить игру """
         pygame.init()
         clock = pygame.time.Clock()
@@ -55,10 +55,11 @@ class GameOfLife:
         if randomize:
             for i in range(self.cell_height):
                 self.clist.append([random.randint(0, 1) for j in range(self.cell_width)])
-        else: self.clist = [[0] * self.cell_width for i in range(self.cell_height)]
+        else:
+            self.clist = [[0] * self.cell_width for i in range(self.cell_height)]
         return self.clist
 
-    def draw_cell_list(self, clist):
+    def draw_cell_list(self, clist: list) -> None:
         """ Отображение списка клеток """
         for h in range(self.cell_height):
             for w in range(self.cell_width):
@@ -85,7 +86,7 @@ class GameOfLife:
     def update_cell_list(self, cell_list: List) -> List:
         """ Выполнить один шаг игры. """
         new_clist = []
-        new_clist = copy.deepcopy(cell_list)
+        new_clist = deepcopy(cell_list)
         for i in range(0, self.cell_height):
             for j in range(0, self.cell_width):
                 if self.get_neighbours((i, j)).count(1) == 2:
