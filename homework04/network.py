@@ -3,6 +3,7 @@ import time
 import igraph
 from igraph import Graph
 
+
 def get_network(users_ids, as_edgelist=True):
 
     friends = get_friends(users_ids)
