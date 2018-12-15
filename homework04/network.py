@@ -1,9 +1,7 @@
 from api import get_friends
 import time
 import igraph
-from igraph import Graph, plot
-import numpy as np
-
+from igraph import Graph
 
 def get_network(users_ids, as_edgelist=True):
 
