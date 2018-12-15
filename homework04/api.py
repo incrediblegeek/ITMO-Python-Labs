@@ -5,6 +5,8 @@ import config
 domain = config.VK_CONFIG['domain']
 access_token = config.VK_CONFIG['access_token']
 version = config.VK_CONFIG['version']
+username = config.PLOTLY_CONFIG['username']
+api_key = config.PLOTLY_CONFIG['api_key']
 
 
 def get(url, params={}, timeout=5, max_retries=5, backoff_factor=0.3):
@@ -41,15 +43,16 @@ def get_friends(user_id, fields):
         'domain': domain,
         'access_token': access_token,
         'user_id': user_id,
-        'fields': fields
+        'fields': fields,
+        'version': version
     }
 
-    query = "{domain}/friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&v=5.53".format(**query_params)
+    query = "{domain}/friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&v={version}".format(**query_params)
     response = get(query)
     return response.json()
 
 
-def messages_get_history(user_id, offset=0, count=20):
+def messages_get_history(user_id, offset=0, count=200):
     """ Получить историю переписки с указанным пользователем
 
     :param user_id: идентификатор пользователя, с которым нужно получить историю переписки
@@ -61,4 +64,30 @@ def messages_get_history(user_id, offset=0, count=20):
     assert isinstance(offset, int), "offset must be positive integer"
     assert offset >= 0, "user_id must be positive integer"
     assert count >= 0, "user_id must be positive integer"
-    # PUT YOUR CODE HERE
+
+    query_params = {
+        'domain': domain,
+        'access_token': access_token,
+        'user_id': user_id,
+        'version': version,
+        'offset': offset,
+        'count': count
+    }
+
+    query = "{domain}/messages.getHistory?access_token={access_token}&user_id={user_id}&offset={offset}&count={count}&v={version}".format(**query_params)
+    response = get(query, query_params)
+    count = response.json()['response']['count']
+    history = []
+
+    while count > 0:
+        query = "{domain}/messages.getHistory?access_token={access_token}&user_id={user_id}&offset={offset}&count={count}&v={version}".format(**query_params)
+        response2 = get(query, query_params)
+        messages = response2.json()['response']['items']
+        history.extend(messages)
+        offset += 200
+        count -= min(count, 200)
+        query_params['offset'] = offset
+        query_params['count'] = min(count, 200)
+        time.sleep(0.34)
+    return history
+
