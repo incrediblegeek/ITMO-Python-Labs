@@ -27,7 +27,7 @@ def get_network(users_ids, as_edgelist=True):
     return matrix
 
 
-def plot_graph(graph):
+def plot_graph(user_id):
 
     surnames = get_friends(user_id, 'last_name')
     vertices = [i['last_name'] for i in surnames]
