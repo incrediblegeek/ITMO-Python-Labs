@@ -18,4 +18,4 @@ class User(BaseUser):
 
 class Message(BaseModel):
     """ Модель сообщения """
-    # PUT YOUR CODE HERE
+    date: int

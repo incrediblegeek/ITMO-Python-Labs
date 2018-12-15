@@ -1,11 +1,9 @@
-import datetime as dt
 import datetime
 from statistics import median
 from typing import Optional
 
 from api import get_friends
 from api_models import User
-import math
 
 
 def age_predict(user_id: int) -> Optional[float]:
