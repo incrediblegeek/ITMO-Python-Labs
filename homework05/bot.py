@@ -201,6 +201,7 @@ def get_tomorrow(message):
 @bot.message_handler(commands=['all'])
 def get_all_schedule(message):
     """ Получить расписание на всю неделю для указанной группы """
+
     cur_week = datetime.isocalendar(datetime.today())[1]
     week = ['/monday', '/tuesday', '/wednesday', '/thursday', '/friday', '/saturday', '/sunday']
     week_resp = ['<b>Понедельник:</b>\n', '<b>Вторник:</b>\n', '<b>Среда:</b>\n', '<b>Четверг:</b>\n', '<b>Пятница:</b>\n', '<b>Суббота:</b>\n', '<b>Воскресенье:</b>\n']
@@ -216,6 +217,7 @@ def get_all_schedule(message):
 
     for i in range(7):
         resp_d = week_resp[i]
+
         try:
             day = week[i]
             times_lst, locations_lst, lessons_lst = \
